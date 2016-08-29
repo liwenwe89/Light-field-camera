@@ -13,12 +13,12 @@ function [im,error]=LF_sim(obj,d,D,F,v,N_line,sen_d,sen_N)
 %nx:            场景x坐标
 %ny:            场景y坐标
 
-im=zeros(sen_N);
+im=zeros(sen_N);                                                            %清空sen_N 传感器
 %%  物体信息
-Kx=size(obj,1);
-Ky=size(obj,2);
-d_D=8;                                                                      %场景是主透镜的多少倍
-d_m=2;                                                                      %每个传感器上对应场景中的点的个数
+Kx=size(obj,1);                                                             %返回行数
+Ky=size(obj,2);                                                             %返回列数
+d_D=d/D;                                                                    %场景是主透镜的多少倍
+d_m=1;                                                                      %每个传感器上对应场景中的点的个数
 [nx,ny,error]=select_nx_ny(Kx,Ky,F,d,sen_N,D,d_D,d_m);                      %d_D,d_m为可选参数，不输入时为d_D=8,d_m=2
 if error==1
     return;

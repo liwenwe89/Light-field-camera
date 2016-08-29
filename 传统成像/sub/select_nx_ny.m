@@ -9,7 +9,7 @@ if grad_num==1
     %% 有黑色网格化现象
     % 因为每个传感器上对应的数字化场景的点的个数不为整数
     if (exist('d_D','var')==0)||(d_D==0)
-        d_D=8;                                                             %场景是主透镜的多少倍
+        d_D=200;                                                             %场景是主透镜的多少倍
     end
     nx=linspace(-d_D*D/2,d_D*D/2,Kx);
     ny=linspace(-d_D*D/2,d_D*D/2,Ky);
@@ -22,7 +22,7 @@ elseif grad_num==2
     %sen_d/v_re=dd/d
     %dd=d*sen_d/v_re=d*(D/sen_N)*((d-F)/(F*d))=(D/sen_N)*(F-d)/F=(4/500)*(250-16)/16=0.117
     if (exist('d_m','var')==0)||(d_m==0)
-        d_m=2;                                                             %每个传感器上对应场景中的点的个数
+        d_m=200;                                                           %每个传感器上对应场景中的点的个数
     end
     dd=(D/sen_N)*(d-F)/F;                                                  %表示每个场景间的最大间隔
     nx=linspace(-dd*Kx/(2*d_m),dd*Kx/(2*d_m),Kx);

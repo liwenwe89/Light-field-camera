@@ -14,22 +14,30 @@ close all
 addpath(genpath('.\image'));
 addpath(genpath('.\sub'));
 
-%%  参数
-D=4;                                                                        %直径
-F=16;                                                                       %焦距
-d=200;                                                                      %物距
+%%  参数 单位mm
+D=4/1.4;                                                                   %直径 1/F = 1.4 = 焦距/直径
+F=4;                                                                       %焦距
+d=2000;                                                                    %物距
 %v=F*d/(d-F);  %像距
-v=17;
+v=4;                                                                       %在焦距上
 N_line=5;                                                                  %对主透镜的离散化，每个点在主透镜有多少光线
-sen_N=500;                                                                  %传感器总个数
-sen_d=D/sen_N;                                                              %传感器直径
+sen_N=500;                                                                 %传感器总个数
+sen_d=D/sen_N;                                                             %传感器直径
 
-obj=select_obj();                                                          %选择物体
-if obj==0
-    clearall
-    disp('请重新选择参数！');
-    break;
-end
+%选择图像 暂时不需要通过选择的方式实现，而且这个名字也比较奇怪
+% obj=select_obj();                                                        %选择物体
+% if obj==0
+%     clearall
+%     disp('请重新选择参数！');
+%     break;
+% end
+
+%% 读取图像，并将图像转为灰度图
+obj_imread=imread('17.jpg'); %843*1268
+obj_gray=rgb2gray(obj_imread);
+obj_gray_double=double(obj_gray);
+
+obj = obj_gray_double;
 
 %% 模拟成像过程
 tic
