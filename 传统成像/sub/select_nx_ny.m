@@ -4,7 +4,7 @@ error=0;
 nx=zeros(1,Kx);
 ny=zeros(1,Ky);
 grad_num=menu('是否呈现黑色网格现象：','是','否','结束');
-
+disp(['d_m=',d_m])
 if grad_num==1
     %% 有黑色网格化现象
     % 因为每个传感器上对应的数字化场景的点的个数不为整数
@@ -22,7 +22,7 @@ elseif grad_num==2
     %sen_d/v_re=dd/d
     %dd=d*sen_d/v_re=d*(D/sen_N)*((d-F)/(F*d))=(D/sen_N)*(F-d)/F=(4/500)*(250-16)/16=0.117
     if (exist('d_m','var')==0)||(d_m==0)
-        d_m=200;                                                           %每个传感器上对应场景中的点的个数
+        d_m=2;                                                            %每个传感器上对应场景中的点的个数
     end
     dd=(D/sen_N)*(d-F)/F;                                                  %表示每个场景间的最大间隔
     nx=linspace(-dd*Kx/(2*d_m),dd*Kx/(2*d_m),Kx);

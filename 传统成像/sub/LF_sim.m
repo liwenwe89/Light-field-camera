@@ -25,9 +25,10 @@ if error==1
 else
     fprintf('\n开始相机传输过程：\n');
 end
-%% 相机成像过程
+%% 相机成像过程 薄透镜
 M_len=[1 0;-1/F 1];                                                         %主透镜折射
-T=[1 v;0 1];                                                                %主透镜与微透镜之间传播
+%这个是什么问题？ 怎么传输，是主透镜到sensor之间
+T=[1 v;0 1];                                                                %主透镜与微透镜之间传播 
 
 sen_N_1=1/sen_d;                                                            %单位距离传感器个数
 
@@ -47,11 +48,17 @@ for ix=1:Kx
         if obj(ix,jy)~=0
             dx=nx(ix);                                                      %选择入射光在物体处的x坐标
             dy=ny(jy);                                                      %选择入射光在物体处的y坐标
-            In=obj(ix,jy)/(N_line^2);                                       %每条光线的光强  此处有近似
+           %% 每条光线的光强  此处有近似
+            In=obj(ix,jy)/(N_line ^2);  %%不清楚光强和物体有什么关系？可以理解为灰度值，就是光强，每一个点上的光束都均匀的射到镜面上，
+                                        %%后续就按照镜面为入射面进行计算就可以额
+                                        %%镜面上物[1,0;0,1]可以不乘，就得到T*M*[R,theta]；
+                                        %%这样基本上能说的通了
+          
             for i=1:N_line
                 x=n(i);                                                     %透镜上离散坐标
                 theta=atan((x-dx)/d);                                       %入射光与透镜的角度
-                pq1_x=T*M_len*[x;theta];                                    %透镜的转换及移动距离v
+              %  pq1_x=T*M_len*[x;theta];      %[x;theta]表示入射光线向量，和z高度，以及和z水平夹角                 %透镜的转换及移动距离v
+                pq1_x=T*M_len*[x;theta];
                 x1=pq1_x(1);
                 para_th(i)=pq1_x(2);
                 para_x(i)=sen_N_1*x1+fix(sen_N/2)+1 ;                       %调整后的x2  1--4001
@@ -66,6 +73,8 @@ for ix=1:Kx
                 para_y(j)=sen_N_1*y1+fix(sen_N/2)+1 ;                       %调整后的y2
                 para_ry(j)=round(para_y(j));                                %传感器坐标为整数
             end
+            
+            %% 计算光强
             for i=1:N_line
                 for j=1:N_line
                     if ((n(i)^2+n(j)^2)<=(D/2)^2)&&(para_rx(i)<=sen_N)&&(para_ry(j)<=sen_N)&&(para_rx(i)>0)&&(para_ry(j)>0)
@@ -73,8 +82,8 @@ for ix=1:Kx
                         %(para_rx(i)<=sen_N_total)&&(para_ry(j)<=sen_N_total)&&(para_rx(i)>0)&&(para_ry(j)>0) 在传感器范围内
                         rx=para_rx(i);
                         ry=para_ry(j);
-                        midpara=im(rx,ry);
-                        In1=midpara+In*sqrt(cos(para_th(i))^2+cos(para_be(j))^2);
+                        midpara=im(rx,ry);%% 变换光强？
+                        In1=midpara+In*sqrt(cos(para_th(i))^2+cos(para_be(j))^2);  %%理解为x方面和y方向的光强 ，最终合并为z方向的光强
                         im(rx,ry)=In1;
                     end
                 end
